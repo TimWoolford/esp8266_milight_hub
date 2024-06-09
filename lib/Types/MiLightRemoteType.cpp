@@ -10,7 +10,7 @@ static const char* REMOTE_NAME_FUT091  = "fut091";
 static const char* REMOTE_NAME_FUT020  = "fut020";
 static const char* REMOTE_NAME_FUT006  = "fut006";
 
-const MiLightRemoteType MiLightRemoteTypeHelpers::remoteTypeFromString(const String& type) {
+MiLightRemoteType MiLightRemoteTypeHelpers::remoteTypeFromString(const String& type) {
   if (type.equalsIgnoreCase(REMOTE_NAME_RGBW) || type.equalsIgnoreCase("fut096")) {
     return REMOTE_TYPE_RGBW;
   }
@@ -49,51 +49,78 @@ const MiLightRemoteType MiLightRemoteTypeHelpers::remoteTypeFromString(const Str
   return REMOTE_TYPE_UNKNOWN;
 }
 
-const String MiLightRemoteTypeHelpers::remoteTypeToString(const MiLightRemoteType type) {
+String MiLightRemoteTypeHelpers::remoteTypeToString(const MiLightRemoteType type) {
   switch (type) {
-    case REMOTE_TYPE_RGBW:
-      return REMOTE_NAME_RGBW;
-    case REMOTE_TYPE_CCT:
-      return REMOTE_NAME_CCT;
-    case REMOTE_TYPE_RGB_CCT:
-      return REMOTE_NAME_RGB_CCT;
-    case REMOTE_TYPE_FUT089:
-      return REMOTE_NAME_FUT089;
-    case REMOTE_TYPE_RGB:
-      return REMOTE_NAME_RGB;
-    case REMOTE_TYPE_FUT091:
-      return REMOTE_NAME_FUT091;
-    case REMOTE_TYPE_FUT020:
-      return REMOTE_NAME_FUT020;
-    case REMOTE_TYPE_FUT006:
-      return REMOTE_NAME_FUT006;
-    default:
-      Serial.print(F("remoteTypeToString: ERROR - tried to fetch remote config name for unknown type: "));
-      Serial.println(type);
-      return "unknown";
+  case REMOTE_TYPE_RGBW:
+    return REMOTE_NAME_RGBW;
+  case REMOTE_TYPE_CCT:
+    return REMOTE_NAME_CCT;
+  case REMOTE_TYPE_RGB_CCT:
+    return REMOTE_NAME_RGB_CCT;
+  case REMOTE_TYPE_FUT089:
+    return REMOTE_NAME_FUT089;
+  case REMOTE_TYPE_RGB:
+    return REMOTE_NAME_RGB;
+  case REMOTE_TYPE_FUT091:
+    return REMOTE_NAME_FUT091;
+  case REMOTE_TYPE_FUT020:
+    return REMOTE_NAME_FUT020;
+  case REMOTE_TYPE_FUT006:
+    return REMOTE_NAME_FUT006;
+  default:
+    Serial.print(F("remoteTypeToString: ERROR - tried to fetch remote config name for unknown type: "));
+    Serial.println(type);
+    return "unknown";
   }
 }
 
-const bool MiLightRemoteTypeHelpers::supportsRgb(const MiLightRemoteType type) {
+bool MiLightRemoteTypeHelpers::supportsRgb(const MiLightRemoteType type) {
   switch (type) {
-    case REMOTE_TYPE_FUT089:
-    case REMOTE_TYPE_RGB:
-    case REMOTE_TYPE_RGB_CCT:
-    case REMOTE_TYPE_RGBW:
-      return true;
-    default:
-      return false;
+  case REMOTE_TYPE_FUT089:
+  case REMOTE_TYPE_RGB:
+  case REMOTE_TYPE_RGB_CCT:
+  case REMOTE_TYPE_RGBW:
+    return true;
+  default:
+    return false;
   }
 }
 
-const bool MiLightRemoteTypeHelpers::supportsColorTemp(const MiLightRemoteType type) {
+bool MiLightRemoteTypeHelpers::supportsColorTemp(const MiLightRemoteType type) {
   switch (type) {
-    case REMOTE_TYPE_CCT:
-    case REMOTE_TYPE_FUT089:
-    case REMOTE_TYPE_FUT091:
-    case REMOTE_TYPE_RGB_CCT:
-      return true;
-    default:
-      return false;
+  case REMOTE_TYPE_CCT:
+  case REMOTE_TYPE_FUT089:
+  case REMOTE_TYPE_FUT091:
+  case REMOTE_TYPE_RGB_CCT:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool MiLightRemoteTypeHelpers::supportsWhiteMode(const MiLightRemoteType type) {
+  // These bulbs support switching between rgb/white, and have a "white_mode" command
+  switch (type) {
+  case REMOTE_TYPE_FUT089:
+  case REMOTE_TYPE_RGB_CCT:
+  case REMOTE_TYPE_RGBW:
+    return true;
+  default:
+    return false;
+  }
+}
+
+bool MiLightRemoteTypeHelpers::supportsNumberedEffects(const MiLightRemoteType type) {
+  // All bulbs except CCT have 9 modes.  FUT029 and RGB/FUT096 has 9 modes, but they
+  // are not selectable directly.  There are only "next mode" commands.
+  switch (type) {
+  case REMOTE_TYPE_CCT:
+  case REMOTE_TYPE_RGB:
+  case REMOTE_TYPE_RGB_CCT:
+  case REMOTE_TYPE_FUT006:
+  case REMOTE_TYPE_FUT020:
+    return false;
+  default:
+    return true;
   }
 }

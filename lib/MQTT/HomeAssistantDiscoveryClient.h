@@ -1,8 +1,23 @@
 #pragma once
 
+#include <list>
+#include <map>
 #include <BulbId.h>
 #include <MqttClient.h>
-#include <map>
+
+
+namespace HomeAssistantValues
+{
+  // Color Modes
+  static const char BRIGHTNESS[] = "brightness";
+  static const char RGB[] = "rgb";
+  static const char COLOR_TEMP[] = "color_temp";
+
+  // Effects
+  static const char NORMAL[] = "normal";
+  static const char NIGHT_MODE[] = "night_mode";
+  static const char WHITE_MODE[] = "white_mode";
+}
 
 class HomeAssistantDiscoveryClient {
 public:
@@ -18,7 +33,7 @@ private:
   Settings& settings;
   MqttClient* mqttClient;
 
-  String buildTopic(const BulbId& bulbId);
-  String bindTopicVariables(const String& topic, const char* alias, const BulbId& bulbId);
-  void addNumberedEffects(JsonArray& effectList, uint8_t start, uint8_t end);
+  String buildTopic(const BulbId& bulbId) const;
+  static String bindTopicVariables(const String& topic, const char* alias, const BulbId& bulbId);
+  static void addNumberedEffects(const JsonArray& effectsList, const std::list<uint8_t>& numbers);
 };

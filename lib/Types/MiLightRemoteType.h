@@ -16,8 +16,10 @@ enum MiLightRemoteType {
 
 class MiLightRemoteTypeHelpers {
 public:
-  static const MiLightRemoteType remoteTypeFromString(const String& type);
-  static const String remoteTypeToString(const MiLightRemoteType type);
-  static const bool supportsRgb(const MiLightRemoteType type);
-  static const bool supportsColorTemp(const MiLightRemoteType type);
+  static MiLightRemoteType remoteTypeFromString(const String& type);
+  static String remoteTypeToString(MiLightRemoteType type);
+  static bool supportsRgb(MiLightRemoteType type);
+  static bool supportsColorTemp(MiLightRemoteType type);
+  static bool supportsWhiteMode(MiLightRemoteType type);
+  static bool supportsNumberedEffects(MiLightRemoteType type);
 };
